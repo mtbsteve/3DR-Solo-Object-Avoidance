@@ -1,7 +1,7 @@
 # 3DR-Solo-Object-Avoidance
 
 Overview
-Note: this code is for experimental use only! 
+Note: this code is for experimental use only and constststantly evolving!
 
 Requirements:
 - Lidar Lightware SF/LW20 with serial connection
