@@ -1,7 +1,7 @@
 # 3DR-Solo-Object-Avoidance
 
 Overview
-Note: this code is for experimental use only and constststantly evolving!
+Note: this code is for experimental use only and constantly evolving!
 
 Link to video:
 https://youtu.be/co4E9P2Q5RQ
