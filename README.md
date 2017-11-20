@@ -23,7 +23,7 @@ Prerequisites:
 
 The code works on all Solo firmware versions, however the LED visualization only works in Arducopter 3.5 and higher or with the special firmware of Hugh Eaves (thank you!!) https://github.com/hugheaves/solo-led-control
 
-Note: the code is not yet compatible with OpenSolo!
+Note: the code is not yet compatible with OpenSolo shotmanager!
 
 Functionality:
 The code is constantly evolving. Current features include:
@@ -36,7 +36,7 @@ The code is constantly evolving. Current features include:
 
 Known limitations:
 - obstacle avoidance is not yet enabled in all Smartshots (coming soon)
-- no support for OpenSolo shotmanager
+- no support for OpenSolo
 - LED support only with AC3.5 and higher firmware
 
 Feedback, issue reports and suggestions always welcome!
