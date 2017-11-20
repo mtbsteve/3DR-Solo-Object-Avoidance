@@ -9,7 +9,7 @@ Requirements:
 - Arduino Mega (we require 2 UARTS)
 - USB cable to connect the Arduino to the breakout board
 - Solo accessory bay breakout board
-- 3DR Solo running AC3.5 or stock 3DR Firmware
+- 3DR Solo running Arducopter3.5 on the Pixhawk or any 3DR Firmware version
 
 Prerequisites:
 - Arduino:
