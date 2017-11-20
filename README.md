@@ -40,7 +40,7 @@ The code is constantly evolving. Current features include:
 
 Known limitations:
 - obstacle avoidance is not yet enabled in all Smartshots (coming soon)
-- no support for OpenSolo
+- no support for OpenSolo yet
 - LED support only with AC3.5 and higher firmware
 
 Feedback, issue reports and suggestions always welcome!
