@@ -32,10 +32,11 @@ The code is constantly evolving. Current features include:
 - the LEDs indicate the detection of an obstacle by flashing red (Left LED: obstacle to the left; right LED: obstacle to the right; both front LEDs: obstacle in center)
 - If a front collision is detected, Solo goes into BRAKE mode in GPS assisted modes (except AUTO). You can exit BRAKE by pressing the FLY button anytime
 - Solo keeps track of the forward pitch angle. As soon as the pitch angle would cause the lidar vbeam to hit ground, obstace avoidance is temporarily disabled. Both front LEDs flash in yellow to indicate that status.
-- in non-GPS assisted modes, obastacles are indicated by LED only
+- in non-GPS assisted modes, obstacles are indicated by LED only
 
 Known limitations:
 - obstacle avoidance is not yet enabled in all Smartshots (coming soon)
 - no support for OpenSolo shotmanager
 - LED support only with AC3.5 and higher firmware
 
+Feedback, issue reports and suggestions always welcome!
