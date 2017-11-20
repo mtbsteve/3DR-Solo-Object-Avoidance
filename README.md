@@ -3,6 +3,9 @@
 Overview
 Note: this code is for experimental use only and constststantly evolving!
 
+Link to video:
+https://youtu.be/co4E9P2Q5RQ
+
 Requirements:
 - Lidar Lightware SF/LW20 with serial connection
 - Servo to control the scanning
