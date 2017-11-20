@@ -12,13 +12,12 @@ Requirements:
 - 3DR Solo running AC3.5 or stock 3DR Firmware
 
 Prerequisites:
-Arduino:
-- install the libraries for the lightware SF20 https://github.com/LightWare-Optoelectronics/LW20-Api
-Solo:
-- You must have PyMata version 2.1 installed on Solo. Newer versions than 2.1 do not properly install on Solo.
-To download PyMata, go here: https://github.com/MrYsLab/pymata-aio
+- Arduino:
+  - install the libraries for the lightware SF20 https://github.com/LightWare-Optoelectronics/LW20-Api
+- Solo:
+  - You must have PyMata version 2.1 installed on Solo. Newer versions than 2.1 do not properly install on Solo. To download PyMata, go here: https://github.com/MrYsLab/pymata-aio
 
-Then install the buttonmanager.py and shotmanager.py files in the Solo /usr/bin directory using a SSH client
+  - Then install the buttonmanager.py and shotmanager.py files in the Solo /usr/bin directory using a SSH client
 
 The code works on all Solo firmware versions, however the LED visualization only works in Arducopter 3.5 and higher or the special firmware of Hugh Eaves (thank you!!) https://github.com/hugheaves/solo-led-control
 
