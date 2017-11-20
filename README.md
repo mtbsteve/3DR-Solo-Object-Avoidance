@@ -20,6 +20,7 @@ Prerequisites:
   - deploy the Arduino sketch with the latest Arduino IDE
   
 - Solo:
+  - Bridge the 3DRID pin on the breakout board to GND to set the Solo IMX as USB host and then connect the Arduino to the USB connector on the breakout board.
   - You must have PyMata version 2.1 installed on Solo. Newer versions than 2.1 do not properly install on Solo. To download PyMata, go here: https://github.com/MrYsLab/pymata-aio
 
   - Then install the buttonmanager.py and shotmanager.py files in the Solo /usr/bin directory using a SSH client
