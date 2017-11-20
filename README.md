@@ -19,7 +19,7 @@ Prerequisites:
 
   - Then install the buttonmanager.py and shotmanager.py files in the Solo /usr/bin directory using a SSH client
 
-The code works on all Solo firmware versions, however the LED visualization only works in Arducopter 3.5 and higher or the special firmware of Hugh Eaves (thank you!!) https://github.com/hugheaves/solo-led-control
+The code works on all Solo firmware versions, however the LED visualization only works in Arducopter 3.5 and higher or with the special firmware of Hugh Eaves (thank you!!) https://github.com/hugheaves/solo-led-control
 
 Note: the code is not yet compatible with the shotmanager changes in OpenSolo!
 
@@ -35,4 +35,5 @@ The code is constantly evolving. Current features include:
 Known limitations:
 - obstacle avoidance is not yet enabled in all Smartshots (coming soon)
 - no support for OpenSolo shotmanager
+- LED support only with AC3.5 and higher firmware
 
