@@ -23,7 +23,7 @@ Prerequisites:
 
 The code works on all Solo firmware versions, however the LED visualization only works in Arducopter 3.5 and higher or with the special firmware of Hugh Eaves (thank you!!) https://github.com/hugheaves/solo-led-control
 
-Note: the code is not yet compatible with the shotmanager changes in OpenSolo!
+Note: the code is not yet compatible with OpenSolo!
 
 Functionality:
 The code is constantly evolving. Current features include:
