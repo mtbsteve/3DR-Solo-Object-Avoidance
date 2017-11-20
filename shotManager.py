@@ -93,7 +93,7 @@ class ShotManager():
         # instantiate rewindManager
         self.rewindManager = rewindManager.RewindManager(self.vehicle, self)
 	
-	    # Create a PyMata instance and initialize the object avoidance toggles
+        # Create a PyMata instance and initialize the object avoidance toggles
         self.led_left_state = 0
         self.led_right_state = 0
         self.led_center_state = 0
@@ -568,13 +568,11 @@ class ShotManager():
             elif (self.arduinoBoard.digital_read(COLL_CENTER) == 1):
                 if (self.led_center_state == 0):
                     logger.log("[objavoid]: Obstacle in center")
-                    # when we are in Loiter, goto brake otherwise in a shot lets pause
+                    # when we are not in a shot, goto brake
                     if (self.currentShot == shots.APP_SHOT_NONE):
                         self.vehicle.mode = VehicleMode("BRAKE")
-                    elif (self.vehicle.mode != VehicleMode("BRAKE") and self.currentShot != shots.APP_SHOT_NONE):
-                        self.notifyPause(0)
 						
-					# both LED back set to strobe yellow and front set to strobe red
+                    # both LED back set to strobe yellow and front set to strobe red
                     self.LEDrgb(2, 4, 255, 0, 0)
                     self.LEDrgb(3, 4, 255, 0, 0)
                     self.led_right_state = 0
