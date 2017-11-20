@@ -14,6 +14,8 @@ Requirements:
 Prerequisites:
 - Arduino:
   - install the libraries for the lightware SF20 https://github.com/LightWare-Optoelectronics/LW20-Api
+  - deploy the Arduino sketch with the latest Arduino IDE
+  
 - Solo:
   - You must have PyMata version 2.1 installed on Solo. Newer versions than 2.1 do not properly install on Solo. To download PyMata, go here: https://github.com/MrYsLab/pymata-aio
 
