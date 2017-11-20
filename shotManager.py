@@ -569,7 +569,7 @@ class ShotManager():
                 if (self.led_center_state == 0):
                     logger.log("[objavoid]: Obstacle in center")
                     # when we are in Loiter, goto brake otherwise in a shot lets pause
-                    if (self.vehicle.mode == VehicleMode("LOITER") and self.currentShot == shots.APP_SHOT_NONE):
+                    if (self.currentShot == shots.APP_SHOT_NONE):
                         self.vehicle.mode = VehicleMode("BRAKE")
                     elif (self.vehicle.mode != VehicleMode("BRAKE") and self.currentShot != shots.APP_SHOT_NONE):
                         self.notifyPause(0)
