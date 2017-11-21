@@ -558,7 +558,8 @@ class ShotManager():
             if (self.arduinoBoard.digital_read(COLL_RIGHT) == 1):
                 if (self.led_right_state == 0):
                     logger.log("[objavoid]: Obstacle on the right")
-					# LED right_back set to strobe yellow and right_front set to strobe red
+	            # inform SOLEX at this point
+                    #LED right_back set to strobe yellow and right_front set to strobe red
                     self.LEDrgb(3, 2, 255, 0, 0)
                     self.LEDrgb(2, 4, 255, 0, 0)
                     self.led_right_state = 1
@@ -568,6 +569,7 @@ class ShotManager():
             elif (self.arduinoBoard.digital_read(COLL_CENTER) == 1):
                 if (self.led_center_state == 0):
                     logger.log("[objavoid]: Obstacle in center")
+                    # Inform SOLEX at this point
                     # when we are not in a shot, goto brake
                     if (self.currentShot == shots.APP_SHOT_NONE):
                         self.vehicle.mode = VehicleMode("BRAKE")
@@ -582,6 +584,7 @@ class ShotManager():
             elif (self.arduinoBoard.digital_read(COLL_LEFT) == 1):
                 if (self.led_left_state == 0):
                     logger.log("[objavoid]: Obstacle on the left")
+                    #Inform SOLEX at this point
                     # LED left_back set to strobe yellow and left_front set to strobe red
                     self.LEDrgb(2, 2, 0, 255, 0)
                     self.LEDrgb(3, 4, 255, 0, 0)
