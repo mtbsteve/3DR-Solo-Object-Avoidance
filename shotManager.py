@@ -47,10 +47,14 @@ from PyMata.pymata import PyMata
 COLL_RIGHT =4
 COLL_CENTER = 3
 COLL_LEFT = 2
-TOGGLE_SWITCH = 5
 SCAN_ENABLE = 6
-# defined scan distance on Arduino
-SCAN_BEAM_DISTANCE = 3
+SCAN_BIT1 = 10
+SCAN_BIT2 = 9
+SCAN_BIT3 = 8
+SCAN_BIT4 = 7
+
+# defined scan distance in meters on Arduino
+SCAN_BEAM_DISTANCE = 8
 
 try:
     from shotManager_version import VERSION
@@ -93,17 +97,22 @@ class ShotManager():
         # instantiate rewindManager
         self.rewindManager = rewindManager.RewindManager(self.vehicle, self)
 	
-        # Create a PyMata instance and initialize the object avoidance toggles
+	    # Create a PyMata instance and initialize the object avoidance toggles
         self.led_left_state = 0
         self.led_right_state = 0
         self.led_center_state = 0
         self.led_beam_angle_state = 0
+        self.center_collision_state = 0
 
         try:
             self.arduinoBoard = PyMata("/dev/ttyACM0", verbose=True)
             self.arduinoBoard.set_pin_mode(COLL_RIGHT, self.arduinoBoard.INPUT, self.arduinoBoard.DIGITAL)
             self.arduinoBoard.set_pin_mode(COLL_CENTER, self.arduinoBoard.INPUT, self.arduinoBoard.DIGITAL)
             self.arduinoBoard.set_pin_mode(COLL_LEFT, self.arduinoBoard.INPUT, self.arduinoBoard.DIGITAL)
+            self.arduinoBoard.set_pin_mode(SCAN_BIT1, self.arduinoBoard.INPUT, self.arduinoBoard.DIGITAL)
+            self.arduinoBoard.set_pin_mode(SCAN_BIT2, self.arduinoBoard.INPUT, self.arduinoBoard.DIGITAL)
+            self.arduinoBoard.set_pin_mode(SCAN_BIT3, self.arduinoBoard.INPUT, self.arduinoBoard.DIGITAL)
+            self.arduinoBoard.set_pin_mode(SCAN_BIT4, self.arduinoBoard.INPUT, self.arduinoBoard.DIGITAL)
         except:
             logger.log("[shotmanager]: Error in communication to Arduino")
 
@@ -544,7 +553,7 @@ class ShotManager():
         self.pitch_angle = abs((self.vehicle.attitude.pitch))
         self.check_altitude = self.vehicle.location.global_relative_frame.alt
         #logger.log("pitch: %s" % self.pitch_angle)
-        if (self.vehicle.attitude.pitch < 0 and self.check_altitude != 0 and self.check_altitude < 1.5 and self.check_altitude > -1.5):
+        if (self.vehicle.attitude.pitch < 0 and self.check_altitude != 0 and self.check_altitude < 3 and self.check_altitude > -1):
             self.beamreach = (self.check_altitude / math.sin(self.pitch_angle))
         else:
             self.beamreach = 1000
@@ -557,40 +566,57 @@ class ShotManager():
 			
             if (self.arduinoBoard.digital_read(COLL_RIGHT) == 1):
                 if (self.led_right_state == 0):
-                    logger.log("[objavoid]: Obstacle on the right")
-	            # inform SOLEX at this point
-                    #LED right_back set to strobe yellow and right_front set to strobe red
+                    logger.log("[objavoid]: Obstacle on the right in: %d" % self.coll_distance() + " meters")
+                    #exceptStr = "Warning Obstacle on the right in %d" % self.coll_distance() + " meters"
+                    #packet = struct.pack('<II%ds' % (len(exceptStr)), app_packet.SOLO_MESSAGE_SHOTMANAGER_ERROR, len(exceptStr), exceptStr)
+                    #self.appMgr.client.send(packet)
+                    # sleep to make sure the packet goes out
+                    #time.sleep(0.2)
+                    # LED right_front set to strobe magenta
                     self.LEDrgb(3, 2, 255, 0, 0)
-                    self.LEDrgb(2, 4, 255, 0, 0)
+                    self.LEDrgb(2, 4, 255, 0, 255)
                     self.led_right_state = 1
                     self.led_left_state = 0
                     self.led_center_state = 0
-				
+                    self.center_collision_state = 0
+
             elif (self.arduinoBoard.digital_read(COLL_CENTER) == 1):
                 if (self.led_center_state == 0):
-                    logger.log("[objavoid]: Obstacle in center")
-                    # Inform SOLEX at this point
-                    # when we are not in a shot, goto brake
-                    if (self.currentShot == shots.APP_SHOT_NONE):
+                    logger.log("[objavoid]: Obstacle in center in: %d" % self.coll_distance() + " meters")
+                    # when we are not in a shot or in zipline, MPCC, FollowMe or RTL, goto brake
+                    if (self.currentShot == shots.APP_SHOT_NONE or self.currentShot == shots.APP_SHOT_ZIPLINE or self.currentShot == shots.APP_SHOT_FOLLOW or self.currentShot == shots.APP_SHOT_MULTIPOINT or self.currentShot == shots.APP_SHOT_RTL):
                         self.vehicle.mode = VehicleMode("BRAKE")
-						
-                    # both LED back set to strobe yellow and front set to strobe red
-                    self.LEDrgb(2, 4, 255, 0, 0)
-                    self.LEDrgb(3, 4, 255, 0, 0)
+                    # send status to app
+                    #exceptStr = "Warning Obstacle in center in %d" % self.coll_distance() + " meters"
+                    #packet = struct.pack('<II%ds' % (len(exceptStr)), app_packet.SOLO_MESSAGE_SHOTMANAGER_ERROR, len(exceptStr), exceptStr)
+                    #self.appMgr.client.send(packet)
+                    # sleep to make sure the packet goes out
+                    #time.sleep(0.2)
+
+                    # both LED front set to strobe magenta
+                    self.LEDrgb(2, 4, 255, 0, 255)
+                    self.LEDrgb(3, 4, 255, 0, 255)
                     self.led_right_state = 0
                     self.led_left_state = 0
                     self.led_center_state = 1
+                    self.center_collision_state = 1
 		
             elif (self.arduinoBoard.digital_read(COLL_LEFT) == 1):
                 if (self.led_left_state == 0):
-                    logger.log("[objavoid]: Obstacle on the left")
-                    #Inform SOLEX at this point
-                    # LED left_back set to strobe yellow and left_front set to strobe red
+                    logger.log("[objavoid]: Obstacle on the left in: %d" % self.coll_distance() + " meters")
+					# send status to app
+                    #exceptStr = "Warning Obstacle to the left in %d" % self.coll_distance() + " meters"
+                    #packet = struct.pack('<II%ds' % (len(exceptStr)), app_packet.SOLO_MESSAGE_SHOTMANAGER_ERROR, len(exceptStr), exceptStr)
+                    #self.appMgr.client.send(packet)
+                    # sleep to make sure the packet goes out
+                    #time.sleep(0.2)
+                    # LED left_front set to strobe magenta
                     self.LEDrgb(2, 2, 0, 255, 0)
-                    self.LEDrgb(3, 4, 255, 0, 0)
+                    self.LEDrgb(3, 4, 255, 0, 255)
                     self.led_right_state = 0
                     self.led_left_state = 1
                     self.led_center_state = 0
+                    self.center_collision_state = 0
 
             else:
                 # no obstacle in sight reset everything
@@ -601,10 +627,10 @@ class ShotManager():
                     self.led_right_state = 0
                     self.led_left_state = 0
                     self.led_center_state = 0
+                    self.center_collision_state = 0
 			
         else:
             #logger.log("[objavoid]: pitch/altitude too low - obstacle detection disabled")
-            self.arduinoBoard.digital_write(TOGGLE_SWITCH, 0)
             if (self.led_beam_angle_state == 0):
                 self.LEDrgb(2, 4, 255, 100, 0)
                 self.LEDrgb(3, 4, 255, 100, 0)
@@ -612,8 +638,19 @@ class ShotManager():
                 self.led_right_state = 0
                 self.led_left_state = 0
                 self.led_center_state = 0
-
+                self.center_collision_state = 0
+				# send status to app
+                #exceptStr = "Warning Pitch altitude mismatch for scan"
+                #packet = struct.pack('<II%ds' % (len(exceptStr)), app_packet.SOLO_MESSAGE_SHOTMANAGER_ERROR, len(exceptStr), exceptStr)
+                #self.appMgr.client.send(packet)
+                # sleep to make sure the packet goes out 
+                #time.sleep(0.2)
  
+    def coll_distance(self):
+        x = str(self.arduinoBoard.digital_read(SCAN_BIT4)) + str(self.arduinoBoard.digital_read(SCAN_BIT3)) + str(self.arduinoBoard.digital_read(SCAN_BIT2)) + str(self.arduinoBoard.digital_read(SCAN_BIT1))
+        y = int(x, 2) 
+        return y
+		
     def LEDpadArray(self, byteArray):
         return byteArray + bytearray([0]) * (24 - len(byteArray))    
 
