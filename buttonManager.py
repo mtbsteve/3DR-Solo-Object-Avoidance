@@ -295,6 +295,7 @@ class buttonManager():
                     self.shotMgr.LEDrgb(2, 2, 0, 255, 0)
                     self.shotMgr.LEDrgb(3, 2, 255, 0, 0)
                     self.scanactive = 0
+                    self.shotMgr.led_beam_angle_state = 0
                 except:   
                     logger.log("[button]: Error in communication to Arduino")
 
