@@ -34,10 +34,10 @@ Functionality:
 The code is constantly evolving. Current features include:
 - 3 sector scanning for obstacles
 - scan is enabled by log-button press on the controller paddle. A short button press toggles the GoPro on/off as before
-- the LEDs indicate the detection of an obstacle by flashing red (Left LED: obstacle to the left; right LED: obstacle to the right; both front LEDs: obstacle in center)
-- If a front collision is detected, Solo goes into BRAKE mode in GPS assisted modes as well as in Zipline, MPCC, RTL and FollowMe smartshots. You can exit BRAKE by pressing the FLY button anytime
-- Solo keeps track of the forward pitch angle. As soon as the pitch angle would cause the lidar vbeam to hit ground, obstace avoidance is temporarily disabled. Both front LEDs flash in yellow to indicate that status.
-- Text and speech output in Solex 
+- the LEDs indicate the detection of an obstacle by flashing in purple color (Left LED: obstacle to the left; right LED: obstacle to the right; both front LEDs: obstacle in center)
+- If a front collision is detected, Solo goes into BRAKE mode in all flight modes as well as in Zipline, MPCC and FollowMe smartshots. You can exit BRAKE by pressing the FLY button anytime
+- Obstacle avoidance keeps track of the forward pitch angle along with Solo altitude. As soon as the pitch angle for the current altitude would cause the lidar beam to hit ground, obstace avoidance is temporarily disabled. Both front LEDs flash in yellow to indicate that status.
+- Text and speech output in Solex, for obstacles in the center of the flight path also the approximate distance to he obstacle is reported
 
 Known limitations:
 - no support for OpenSolo yet
