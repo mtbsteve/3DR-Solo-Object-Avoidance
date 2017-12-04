@@ -37,7 +37,7 @@ The code is constantly evolving. Current features include:
 - the LEDs indicate the detection of an obstacle by flashing in purple color (Left LED: obstacle to the left; right LED: obstacle to the right; both front LEDs: obstacle in center)
 - If a front collision is detected, Solo goes into BRAKE mode in all flight modes as well as in Zipline, MPCC and FollowMe smartshots. You can exit BRAKE by pressing the FLY button anytime
 - Obstacle avoidance keeps track of the forward pitch angle along with Solo altitude. As soon as the pitch angle for the current altitude would cause the lidar beam to hit ground, obstace avoidance is temporarily disabled. Both front LEDs flash in yellow to indicate that status.
-- Text and speech output in Solex, for obstacles in the center of the flight path also the approximate distance to he obstacle is reported
+- Text and speech output in Solex, for obstacles in the center of the flight path also the approximate distance to the obstacle is reported
 
 Known limitations:
 - no support for OpenSolo yet
