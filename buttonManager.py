@@ -286,10 +286,10 @@ class buttonManager():
                     self.shotMgr.arduinoBoard.digital_write(SCAN_ENABLE, 1)
                     self.scanactive = 1
                     # send status to app
-                    if self.appMgr.isAppConnected():
+                    if self.shotMgr.appMgr.isAppConnected():
                         exceptStr = "Scanner on"
                         packet = struct.pack('<II%ds' % (len(exceptStr)), app_packet.SOLO_MESSAGE_SHOTMANAGER_ERROR, len(exceptStr), exceptStr)
-                        self.appMgr.client.send(packet)
+                        self.shotMgr.appMgr.client.send(packet)
                         # sleep to make sure the packet goes out
                         time.sleep(0.1)
                 except:   
@@ -304,10 +304,10 @@ class buttonManager():
                     self.scanactive = 0
                     self.shotMgr.led_beam_angle_state = 0
                     # send status to app
-                    if self.appMgr.isAppConnected():
+                    if self.shotMgr.appMgr.isAppConnected():
                         exceptStr = "Scanner off"
                         packet = struct.pack('<II%ds' % (len(exceptStr)), app_packet.SOLO_MESSAGE_SHOTMANAGER_ERROR, len(exceptStr), exceptStr)
-                        self.appMgr.client.send(packet)
+                        self.shotMgr.appMgr.client.send(packet)
                         # sleep to make sure the packet goes out
                         time.sleep(0.1)
                 except:   
