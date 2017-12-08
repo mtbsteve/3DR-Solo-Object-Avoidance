@@ -584,10 +584,13 @@ class ShotManager():
             elif (self.arduinoBoard.digital_read(COLL_CENTER) == 1):
                 if (self.led_center_state == 0):
                     logger.log("[objavoid]: Obstacle in center")
-                    # when we are not in a shot or in zipline, MPCC, FollowMe, goto brake and flying higher than 1 meter
-                    if (self.currentShot == shots.APP_SHOT_NONE or self.currentShot == shots.APP_SHOT_ZIPLINE or self.currentShot == shots.APP_SHOT_FOLLOW or self.currentShot == shots.APP_SHOT_MULTIPOINT):
+                    # when we are not in a shot, nor in RTL or LAND and flying higher than 1 meter
+                    if (self.currentShot == shots.APP_SHOT_NONE and (self.vehicle.mode.name != 'LAND' or self.vehicle.mode.name != 'RTL')):
                         if (self.check_altitude > 1):
                             self.vehicle.mode = VehicleMode("BRAKE")
+                    elif (self.currentShot == shots.APP_SHOT_ZIPLINE or self.currentShot == shots.APP_SHOT_FOLLOW or self.currentShot == shots.APP_SHOT_MULTIPOINT):
+                        #if we are in Multipoint, follow, or zipline shot then pause
+			
                     # send status to app
                     if self.appMgr.isAppConnected():
                         exceptStr = "Obstacle ahead in %.1f" % self.coll_distance() + " meters"
