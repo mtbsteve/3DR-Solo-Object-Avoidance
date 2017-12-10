@@ -9,6 +9,7 @@ import platform
 import select
 import socket
 import string
+import struct
 import sys
 import threading
 import monotonic
@@ -20,6 +21,7 @@ import modes
 import settings
 import shots
 import shotLogger
+import app_packet
 from sololink import btn_msg
 from GoProConstants import *
 import shots
@@ -290,11 +292,11 @@ class buttonManager():
                         exceptStr = "Scanner on"
                         packet = struct.pack('<II%ds' % (len(exceptStr)), app_packet.SOLO_MESSAGE_SHOTMANAGER_ERROR, len(exceptStr), exceptStr)
                         self.shotMgr.appMgr.client.send(packet)
-                        # sleep to make sure the packet goes out
-                        time.sleep(0.1)
+                    # sleep to make sure the packet goes out and the scanner is initialized
+                    time.sleep(1)   
                 except:   
                     logger.log("[button]: Error in communication to Arduino")
-                   
+ 
             else:
                 logger.log("[button]: Turn scanner off")
                 try:
@@ -302,16 +304,16 @@ class buttonManager():
                     self.shotMgr.LEDrgb(2, 2, 0, 255, 0)
                     self.shotMgr.LEDrgb(3, 2, 255, 0, 0)
                     self.scanactive = 0
-                    self.shotMgr.led_beam_angle_state = 0
-                    # send status to app
+                   # send status to app
                     if self.shotMgr.appMgr.isAppConnected():
                         exceptStr = "Scanner off"
                         packet = struct.pack('<II%ds' % (len(exceptStr)), app_packet.SOLO_MESSAGE_SHOTMANAGER_ERROR, len(exceptStr), exceptStr)
                         self.shotMgr.appMgr.client.send(packet)
-                        # sleep to make sure the packet goes out
-                        time.sleep(0.1)
+                    # sleep to make sure the packet goes out and the scanner can shutdown
+                    time.sleep(0.2)
                 except:   
                     logger.log("[button]: Error in communication to Arduino")
+            self.shotMgr.led_beam_angle_state = 0
 
         if event == btn_msg.LongHold and button == btn_msg.ButtonLoiter:
             self.shotMgr.enterShot(shots.APP_SHOT_REWIND)

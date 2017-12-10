@@ -588,9 +588,7 @@ class ShotManager():
                     if (self.currentShot == shots.APP_SHOT_NONE and (self.vehicle.mode.name != 'LAND' or self.vehicle.mode.name != 'RTL')):
                         if (self.check_altitude > 1):
                             self.vehicle.mode = VehicleMode("BRAKE")
-                    elif (self.currentShot == shots.APP_SHOT_ZIPLINE or self.currentShot == shots.APP_SHOT_FOLLOW or self.currentShot == shots.APP_SHOT_MULTIPOINT):
-                        #if we are in Multipoint, follow, or zipline shot then pause
-			
+					# all other shots and modes trigger an audio and visual warning only to not interfere with shots	
                     # send status to app
                     if self.appMgr.isAppConnected():
                         exceptStr = "Obstacle ahead in %.1f" % self.coll_distance() + " meters"
@@ -629,7 +627,7 @@ class ShotManager():
             else:
                 # no obstacle in sight reset everything
                 if (self.led_left_state == 1 or self.led_right_state == 1 or self.led_center_state == 1):
-                    logger.log("[objavoid]: no obstacle in sight switch back lights")
+                    logger.log("[objavoid]: no obstacle in sight reset LED")
                     self.LEDrgb(2, 2, 0, 255, 0)
                     self.LEDrgb(3, 2, 255, 0, 0)
                     self.led_right_state = 0
