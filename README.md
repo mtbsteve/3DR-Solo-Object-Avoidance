@@ -32,7 +32,7 @@ Note: the code is not yet compatible with OpenSolo shotmanager!
 
 Functionality:
 The code is constantly evolving. Current features include:
-- 3 sector scanning for obstacles
+- 3 sector scanning for obstacles for objects within a 6 meter range ahead of Solo.
 - scan is enabled by log-button press on the controller paddle. A short button press toggles the GoPro on/off as before.
 - Scanning on/off is indicated by a text and voice prompt in Solex.
 - the LEDs indicate the detection of an obstacle by flashing in purple color (Left LED: obstacle to the left; right LED: obstacle to the right; both front LEDs: obstacle in center)
