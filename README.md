@@ -5,7 +5,8 @@ Note: this code is for experimental use only and constantly evolving!
 
 Link to videos:
 https://youtu.be/co4E9P2Q5RQ
-https://www.youtube.com/edit?o=U&video_id=OKWKLyUCm9E
+
+https://youtu.be/OKWKLyUCm9E
 
 Requirements:
 - Lidar Lightware SF/LW20 with serial connection
