@@ -338,13 +338,13 @@ class ShotManager():
         try:
             if mode.name != self.lastMode:
                 logger.log("[callback]: Mode changed from %s -> %s"%(self.lastMode, mode.name))
-                
+
                 if mode.name == 'RTL':
-                    logger.log("[callback]: System entered RTL, switch to shot!")
-                    self.enterShot(shots.APP_SHOT_RTL)
+                    logger.log("[callback]: System entered RTL, we stay in there!")
+                #    self.enterShot(shots.APP_SHOT_RTL)
 
                 elif self.currentShot != shots.APP_SHOT_NONE:
-                    # looks like somebody switched us out of guided!  Exit our current shot
+                   # looks like somebody switched us out of guided!  Exit our current shot
                     if mode.name not in shots.SHOT_MODES:
                         logger.log("[callback]: Detected that we are not in the correct apm mode for this shot. Exiting shot!")
                         self.enterShot(shots.APP_SHOT_NONE)
@@ -362,12 +362,12 @@ class ShotManager():
                     return
 
                 if self.currentShot == shots.APP_SHOT_NONE:
-                   self.buttonManager.setArtooShot( -1, modeIndex )
-                   self.currentModeIndex = modeIndex
+                    self.buttonManager.setArtooShot( -1, modeIndex )
+                    self.currentModeIndex = modeIndex
                    
         except Exception as e:
             logger.log('[shot]: mode callback error, %s' % e)
-
+            
     def ekf_callback(self, vehicle, name, ekf_ok):
         try:
             if ekf_ok != self.last_ekf_ok:
@@ -493,7 +493,7 @@ class ShotManager():
 
     def enterFailsafe(self):
         ''' called when we loose RC link or have Batt FS event '''
-
+ 
         # dont enter failsafe on the ground
         if not self.vehicle.armed or self.vehicle.system_status != 'ACTIVE':
             return
@@ -519,8 +519,8 @@ class ShotManager():
             self.enterShot(shots.APP_SHOT_REWIND)
             self.curController.exitToRTL = True
             
-        else:
-            self.enterShot(shots.APP_SHOT_RTL)
+        #else:
+        #   self.enterShot(shots.APP_SHOT_RTL)
 
 
     def registerCallbacks(self):
@@ -584,18 +584,19 @@ class ShotManager():
             elif (self.arduinoBoard.digital_read(COLL_CENTER) == 1):
                 if (self.led_center_state == 0):
                     logger.log("[objavoid]: Obstacle in center")
-                    # when we are not in a shot, nor in RTL or LAND and flying higher than 1 meter
-                    if (self.currentShot == shots.APP_SHOT_NONE and (self.vehicle.mode.name != 'LAND' or self.vehicle.mode.name != 'RTL')):
-                        if (self.check_altitude > 1):
-                            self.vehicle.mode = VehicleMode("BRAKE")
-					# all other shots and modes trigger an audio and visual warning only to not interfere with shots	
+                    # when we are not in a shot and flying higher than 1 meter
+                    if (self.currentShot == shots.APP_SHOT_NONE and self.check_altitude > 1):
+                        logger.log("[objavoid]: calling notifyPause now")
+                        self.notifyPause(False) #trigger brake
+                        #    self.vehicle.mode = VehicleMode("BRAKE")
+					
                     # send status to app
                     if self.appMgr.isAppConnected():
                         exceptStr = "Obstacle ahead in %.1f" % self.coll_distance() + " meters"
                         packet = struct.pack('<II%ds' % (len(exceptStr)), app_packet.SOLO_MESSAGE_SHOTMANAGER_ERROR, len(exceptStr), exceptStr)
                         self.appMgr.client.send(packet)
                         # sleep to make sure the packet goes out
-                        time.sleep(0.2)
+                        time.sleep(0.1)
 
                     # both LED front set to strobe magenta
                     self.LEDrgb(2, 4, 255, 0, 255)
@@ -646,7 +647,7 @@ class ShotManager():
                 self.led_center_state = 0
                 # send status to app
                 if self.appMgr.isAppConnected():
-                    exceptStr = "Solo altitude too low for scan"
+                    exceptStr = "Altitude too low for scan"
                     packet = struct.pack('<II%ds' % (len(exceptStr)), app_packet.SOLO_MESSAGE_SHOTMANAGER_ERROR, len(exceptStr), exceptStr)
                     self.appMgr.client.send(packet)
                     # sleep to make sure the packet goes out 
@@ -676,4 +677,4 @@ class ShotManager():
         msg = self.vehicle.message_factory.led_control_encode(0, 0, led, macro, len(byteArray), self.LEDpadArray(byteArray))
         self.vehicle.send_mavlink(msg)
         # Can't find a functional flush() operation, so wait instead
-        time.sleep(0.2)
+        time.sleep(0.1)
