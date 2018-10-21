@@ -11,10 +11,11 @@ https://youtu.be/OKWKLyUCm9E
 Requirements:
 - Lidar Lightware SF/LW20 with serial connection
 - Servo to control the scanning
-- Arduino Mega (we require 2 UARTS)
+- Arduino Mega
+- NEW: Support for Arduino MicroPro boards
 - USB cable to connect the Arduino to the breakout board
 - Solo accessory bay breakout board
-- 3DR Solo running Arducopter3.5 on the Pixhawk or any 3DR Firmware version
+- 3DR Solo running Arducopter3.5 or Arducopter 3.6
 - Latest Solex version for speech output
 
 Prerequisites:
@@ -38,7 +39,7 @@ The code is constantly evolving. Current features include:
 - scan is enabled by log-button press on the controller paddle. A short button press toggles the GoPro on/off as before.
 - Scanning on/off is indicated by a text and voice prompt in Solex.
 - the LEDs indicate the detection of an obstacle by flashing in purple color (Left LED: obstacle to the left; right LED: obstacle to the right; both front LEDs: obstacle in center)
-- If a front collision is detected, Solo goes into BRAKE mode in all flight modes except LAND or RTL. You can exit BRAKE by pressing the FLY button anytime.
+- If a front collision is detected, Solo goes into BRAKE mode in all flight modes except LAND or RTL. It automatically switches back to Loiter (FLY) once Solo successfully stopped.
 - Obstacle avoidance keeps track of the forward pitch angle along with Solo altitude. As soon as the pitch angle for the current altitude would cause the lidar beam to hit ground, obstace avoidance is temporarily disabled. Both front LEDs flash in yellow to indicate that status.
 - Text and speech output in Solex, for obstacles in the center of the flight path also the approximate distance to the obstacle is reported
 
