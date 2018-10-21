@@ -271,11 +271,11 @@ class buttonManager():
                 self.shotMgr.curController.handleButton(button, event)
 
         
-        if button == btn_msg.ButtonRTL:
-            if self.shotMgr.currentShot == shots.APP_SHOT_RTL:
-                self.shotMgr.curController.handleButton(button, event)
-            elif event == btn_msg.Press:
-                self.shotMgr.enterShot(shots.APP_SHOT_RTL)
+        if button == btn_msg.ButtonRTL and event == btn_msg.LongHold:
+            logger.log("[button]: Try enter Smart RTL")
+            self.shotMgr.vehicle.mode = VehicleMode(mavutil.mode_mapping_acm.get(21))
+            #   self.shotmgr.rcMgr.enableRemapping( false )
+
 
         if button == btn_msg.ButtonCameraClick and event == btn_msg.ClickRelease:
             logger.log("[button]: Trying to toggle GoPro on off")
@@ -293,7 +293,7 @@ class buttonManager():
                         packet = struct.pack('<II%ds' % (len(exceptStr)), app_packet.SOLO_MESSAGE_SHOTMANAGER_ERROR, len(exceptStr), exceptStr)
                         self.shotMgr.appMgr.client.send(packet)
                     # sleep to make sure the packet goes out and the scanner is initialized
-                    time.sleep(1)   
+                    time.sleep(0.5)   
                 except:   
                     logger.log("[button]: Error in communication to Arduino")
  
