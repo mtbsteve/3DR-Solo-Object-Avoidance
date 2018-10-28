@@ -15,7 +15,7 @@ Requirements:
 - NEW: Support for Arduino MicroPro boards
 - USB cable to connect the Arduino to the breakout board
 - Solo accessory bay breakout board
-- 3DR Solo running Arducopter3.5 or Arducopter 3.6
+- 3DR Solo running Arducopter 3.5 or Arducopter 3.6 (lower versions are not supported)
 - Latest Solex version for speech output
 
 Prerequisites:
@@ -41,11 +41,11 @@ The code is constantly evolving. Current features include:
 - the LEDs indicate the detection of an obstacle by flashing in purple color (Left LED: obstacle to the left; right LED: obstacle to the right; both front LEDs: obstacle in center)
 - If a front collision is detected, Solo goes into BRAKE mode in all flight modes except LAND or RTL. It automatically switches back to Loiter (FLY) once Solo successfully stopped.
 - Obstacle avoidance keeps track of the forward pitch angle along with Solo altitude. As soon as the pitch angle for the current altitude would cause the lidar beam to hit ground, obstace avoidance is temporarily disabled. Both front LEDs flash in yellow to indicate that status.
+- NEW: downward-facing Rangefinder support to increase precision at low altitudes
 - Text and speech output in Solex, for obstacles in the center of the flight path also the approximate distance to the obstacle is reported
 
 Known limitations:
 - no support for OpenSolo yet
-- LED support only with AC3.5 and higher firmware
 - Works reliably only under clear weather conditions. In rain, snow and fog, the SF20 reports randomly false readings. 
 
 Feedback, issue reports and suggestions always welcome!
