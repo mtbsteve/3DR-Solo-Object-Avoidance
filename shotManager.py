@@ -12,7 +12,7 @@ import math
 
 # Dronekit/Mavlink imports
 #from dronekit.lib import VehicleMode, LocationGlobal, LocationGlobalRelative
-from dronekit.lib import VehicleMode
+from dronekit.lib import VehicleMode, Rangefinder
 from pymavlink import mavutil
 
 sys.path.append(path.realpath(''))
@@ -550,14 +550,21 @@ class ShotManager():
     def checkForObstacle(self):
         # check if beam will hit the ground at altitudes lower than 3 meters then disable scan
         self.pitch_angle = abs(self.vehicle.attitude.pitch)
-        self.check_altitude = self.vehicle.location.global_relative_frame.alt
-        #logger.log("pitch: %s" % self.pitch_angle)
+        # use the lidar rangefinder for exact altitudes otherwise use the baro
+        if (self.vehicle.rangefinder.distance == None):
+            self.check_altitude = self.vehicle.location.global_relative_frame.alt
+            # logger.log("altitude Baro: %s" % self.check_altitude)
+        else:
+            self.check_altitude = self.vehicle.rangefinder.distance
+            # logger.log("altitude rangefinder: %s" % self.check_altitude)
+        
         if (self.vehicle.attitude.pitch < 0 and self.check_altitude < 3):
             self.beamreach = (self.check_altitude / math.sin(self.pitch_angle))
         else:
             self.beamreach = 1000
         
-        if (self.beamreach > SCAN_BEAM_DISTANCE):
+        # do the collision check only if above 1 meter and when it is ensured that the lidar beam will not hit the ground
+        if (self.beamreach > SCAN_BEAM_DISTANCE and self.check_altitude > 1):
             if (self.led_beam_angle_state == 1):
                 self.led_beam_angle_state = 0
                 self.LEDrgb(2, 2, 0, 255, 0)
@@ -585,7 +592,7 @@ class ShotManager():
                 if (self.led_center_state == 0):
                     logger.log("[objavoid]: Obstacle in center")
                     # when we are not in a shot and flying higher than 1 meter
-                    if (self.currentShot == shots.APP_SHOT_NONE and self.check_altitude > 1):
+                    if (self.currentShot == shots.APP_SHOT_NONE and (self.vehicle.mode != "RTL" or self.vehicle.mode != "LAND")):
                         logger.log("[objavoid]: calling notifyPause now")
                         self.notifyPause(False) #trigger brake
                         #    self.vehicle.mode = VehicleMode("BRAKE")
